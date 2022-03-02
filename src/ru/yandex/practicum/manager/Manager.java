@@ -1,3 +1,5 @@
+package ru.yandex.practicum.manager;
+
 import ru.yandex.practicum.tracker.Epic;
 import ru.yandex.practicum.tracker.Subtask;
 import ru.yandex.practicum.tracker.Task;
@@ -9,13 +11,14 @@ import java.util.HashSet;
 
 public class Manager {
 
-    HashMap<Integer, Task> tasks = new HashMap<>();
-    HashMap<Integer, Epic> epics = new HashMap<>();
-    HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    int globalId = 1;
+    HashMap<Long, Task> tasks = new HashMap<>();
+    HashMap<Long, Epic> epics = new HashMap<>();
+    HashMap<Long, Subtask> subtasks = new HashMap<>();
+    ArrayList<Subtask> sub = new ArrayList<>();
+    long globalId = 1; //Исправил
 
 
-        Task getTask(int id) {
+        public Task getTask(long id) {
             Task taskCopy = new Task("", "");
             Task task = null;
             if (tasks.containsKey(id)) {
@@ -28,9 +31,9 @@ public class Manager {
                 System.out.println("такого нет");
             }
             return taskCopy;
-        }
+        } //в ТЗ есть пункт "Получение по идентификатору."
 
-        Epic getEpic(int id) {
+        public Epic getEpic(long id) {
             Epic epicCopy = new Epic("", "");
             Epic epic = null;
             if (epics.containsKey(id)) {
@@ -45,7 +48,7 @@ public class Manager {
             return epicCopy;
         }
 
-        Subtask getSubtask(int id) {
+        public Subtask getSubtask(long id) {
             Subtask subtaskCopy = new Subtask("", "");
             Subtask subtask = null;
             if (subtasks.containsKey(id)) {
@@ -54,53 +57,56 @@ public class Manager {
                 subtaskCopy.name = subtask.name;
                 subtaskCopy.description = subtask.description;
                 subtaskCopy.setStatus(subtask.getStatus());
-                subtaskCopy.parentId = subtask.parentId;
+                subtaskCopy.setParentId(subtask.getParentId());
             } else {
                 System.out.println("такого нет");
             }
             return subtaskCopy;
         }
 
-        void addTask(Task task) {
+        public void addTask(Task task) {
             task.setId(globalId);
             tasks.put(globalId, task);
             globalId++;
         }
 
-        void addEpic(Epic epic) {
+        public void addEpic(Epic epic) {
             epic.setId(globalId);
             epics.put(globalId, epic);
             globalId++;
         }
 
-        void addSubtask(Subtask subtask, int epicId) {
+        public void addSubtask(Subtask subtask, long epicId) {
+
             if (epics.containsKey(epicId)) {
                 epics.get(epicId);
                 subtask.setId(globalId);
-                subtask.parentId = epicId;
+                subtask.setParentId(epicId);
                 subtasks.put(globalId, subtask);
                 globalId++;
-                Epic epic = epics.get(subtask.parentId);
+                Epic epic = epics.get(subtask.getParentId());
                 updateEpic(epic);
+                sub.add(subtask);
+                epic.setSubtasks(sub);
             } else {
                 System.out.println("Для создания подзадачи нужен эпик.");
             }
         }
 
-        void clearTask() {
+        public void clearTask() {
             tasks.clear();
         }
 
-        void clearEpic() {
+        public void clearEpic() {
             epics.clear();
             subtasks.clear();
         }
 
-        void clearSubtask() {
+        public void clearSubtask() {
             subtasks.clear();
         }
 
-        void removeTask(int id) {
+        public void removeTask(long id) {
             if (tasks.containsKey(id)) {
                 tasks.remove(id);
                 System.out.println("Задача удалена.");
@@ -109,11 +115,11 @@ public class Manager {
             }
         }
 
-        void removeEpic(int id) {
+        public void removeEpic(long id) {
             if (epics.containsKey(id)) {
-                HashSet<Integer> set = new HashSet<>();
+                HashSet<Long> set = new HashSet<>();
                 for (Subtask sub : subtasks.values()){
-                        if (id == sub.parentId) {
+                        if (id == sub.getParentId()) {
                             set.add(sub.getId());
                         }
                 }
@@ -126,7 +132,7 @@ public class Manager {
         }
 
 
-        void removeSubtask(int id) {
+        public void removeSubtask(long id) {
             if (subtasks.containsKey(id)) {
                 subtasks.remove(id);
                 System.out.println("Подзадача удалена.");
@@ -135,11 +141,11 @@ public class Manager {
             }
         }
 
-        ArrayList<Subtask> getEpicSubtasks (int id) {
+        public ArrayList<Subtask> getEpicSubtasks (long id) {
             ArrayList<Subtask> subtasksList = new ArrayList<>();
                 if (epics.containsKey(id)) {
                     for (Subtask sub : subtasks.values()) {
-                        if (id == sub.parentId) {
+                        if (id == sub.getParentId()) {
                             subtasksList.add(sub);
                         }
                     }
@@ -149,7 +155,7 @@ public class Manager {
             return subtasksList;
         }
 
-        ArrayList<Task> getTaskList() {
+        public ArrayList<Task> getTaskList() {
             ArrayList<Task> taskList = new ArrayList<>();
                 for (Task tasks : tasks.values()) {
                     taskList.add(tasks);
@@ -157,7 +163,7 @@ public class Manager {
             return taskList;
         }
 
-        ArrayList<Epic> getEpicList() {
+        public ArrayList<Epic> getEpicList() {
             ArrayList<Epic> epicList = new ArrayList<>();
                 for (Epic epics : epics.values()) {
                     epicList.add(epics);
@@ -165,7 +171,7 @@ public class Manager {
             return epicList;
         }
 
-        ArrayList<Subtask> getSubtaskList() {
+        public ArrayList<Subtask> getSubtaskList() {
             ArrayList<Subtask> subtaskList = new ArrayList<>();
                 for (Subtask subtasks : subtasks.values()) {
                     subtaskList.add(subtasks);
@@ -173,7 +179,7 @@ public class Manager {
             return subtaskList;
         }
 
-        void updateTask(Task task){
+        public void updateTask(Task task){
             if(tasks.containsKey(task.getId())) {
                 tasks.put(task.getId(), task);
             } else {
@@ -181,7 +187,7 @@ public class Manager {
             }
         }
 
-        void updateEpic(Epic epic){
+        public void updateEpic(Epic epic){
             if(epics.containsKey(epic.getId())) {
                 epic.setStatus(getEpicStatus(epic.getId()));
                 epics.put(epic.getId(), epic);
@@ -190,17 +196,17 @@ public class Manager {
             }
         }
 
-        void updateSubtask(Subtask subtask){
+        public void updateSubtask(Subtask subtask){
             if(subtasks.containsKey(subtask.getId())) {
                 subtasks.put(subtask.getId(), subtask);
-                Epic epic = epics.get(subtask.parentId);
+                Epic epic = epics.get(subtask.getParentId());
                 updateEpic(epic);
             } else {
                 System.out.println("вам нечего обновлять");
             }
         }
 
-        Status getEpicStatus(int id) {
+        public Status getEpicStatus(long id) {
            Status status = Status.NEW;
            ArrayList < Subtask > sub = getEpicSubtasks(id);
            for (int i = 0 ; i < sub.size() ; i++) {

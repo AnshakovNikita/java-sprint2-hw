@@ -3,7 +3,7 @@ package ru.yandex.practicum.tracker;
 public class Task {
     public String name;
     public String description;
-    private int id;
+    private long id;
     private Status status;
 
     public Task(String name, String description) {
@@ -24,12 +24,12 @@ public class Task {
     }
 
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

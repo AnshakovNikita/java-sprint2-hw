@@ -1,4 +1,5 @@
 
+import ru.yandex.practicum.manager.Manager;
 import ru.yandex.practicum.tracker.Epic;
 import ru.yandex.practicum.tracker.Status;
 import ru.yandex.practicum.tracker.Subtask;
@@ -60,6 +61,7 @@ public class Main {
         System.out.println(manager.getEpicList());
         System.out.println(manager.getTaskList());
         System.out.println(manager.getSubtaskList());
+
 
         manager.removeTask(1);
         manager.removeEpic(3);
