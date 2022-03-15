@@ -36,6 +36,8 @@ public class Main {
 
 
 
+
+
         System.out.println("История просмотров: " + inMemoryTaskManager.history());
 
         Task taskUpdate = inMemoryTaskManager.getTask(1);

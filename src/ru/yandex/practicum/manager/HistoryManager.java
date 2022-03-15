@@ -2,11 +2,11 @@ package ru.yandex.practicum.manager;
 
 import ru.yandex.practicum.tracker.Task;
 
-import java.util.List;
+import java.util.LinkedList;
 
 public interface HistoryManager {
 
-    List<Task> getHistory();
+    LinkedList<Task> getHistory();
 
     void add(Task task);
 }

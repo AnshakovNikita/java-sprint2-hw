@@ -5,10 +5,7 @@ import ru.yandex.practicum.tracker.Subtask;
 import ru.yandex.practicum.tracker.Task;
 import ru.yandex.practicum.tracker.Status;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -253,7 +250,7 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     @Override
-    public List<Task> history() {
+    public LinkedList<Task> history() {
         return historyManager.getHistory();
     }
 
