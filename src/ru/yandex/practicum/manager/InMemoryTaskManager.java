@@ -8,16 +8,18 @@ import ru.yandex.practicum.tracker.Status;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
-public class Manager {
+public class InMemoryTaskManager implements TaskManager {
 
     HashMap<Long, Task> tasks = new HashMap<>();
     HashMap<Long, Epic> epics = new HashMap<>();
     HashMap<Long, Subtask> subtasks = new HashMap<>();
-    ArrayList<Subtask> sub = new ArrayList<>();
-    long globalId = 1; //Исправил
+    ArrayList<Long> sub = new ArrayList<>();
+    long globalId = 1;
+    private static HistoryManager historyManager = Managers.getDefaultHistory();
 
-
+        @Override
         public Task getTask(long id) {
             Task taskCopy = new Task("", "");
             Task task = null;
@@ -27,12 +29,14 @@ public class Manager {
                 taskCopy.name = task.name;
                 taskCopy.description = task.description;
                 taskCopy.setStatus(task.getStatus());
+                historyManager.add(taskCopy);
             } else {
                 System.out.println("такого нет");
             }
             return taskCopy;
-        } //в ТЗ есть пункт "Получение по идентификатору."
+        }
 
+        @Override
         public Epic getEpic(long id) {
             Epic epicCopy = new Epic("", "");
             Epic epic = null;
@@ -42,12 +46,21 @@ public class Manager {
                 epicCopy.name = epic.name;
                 epicCopy.description = epic.description;
                 epicCopy.setStatus(epic.getStatus());
+                historyManager.add(epicCopy);
             } else {
                 System.out.println("такого нет");
             }
             return epicCopy;
         }
+        /* Можно попробовать так
+        public Epic getEpic(int id) {
+            return epics.get(id);
+        }
 
+        замечание прошлого ревью. Если так сделать, то при создании нового объекта,
+        он будет обновляться до метода updateEpic*/
+
+        @Override
         public Subtask getSubtask(long id) {
             Subtask subtaskCopy = new Subtask("", "");
             Subtask subtask = null;
@@ -58,24 +71,28 @@ public class Manager {
                 subtaskCopy.description = subtask.description;
                 subtaskCopy.setStatus(subtask.getStatus());
                 subtaskCopy.setParentId(subtask.getParentId());
+                historyManager.add(subtaskCopy);
             } else {
                 System.out.println("такого нет");
             }
             return subtaskCopy;
         }
 
+        @Override
         public void addTask(Task task) {
             task.setId(globalId);
             tasks.put(globalId, task);
             globalId++;
         }
 
+        @Override
         public void addEpic(Epic epic) {
             epic.setId(globalId);
             epics.put(globalId, epic);
             globalId++;
         }
 
+        @Override
         public void addSubtask(Subtask subtask, long epicId) {
 
             if (epics.containsKey(epicId)) {
@@ -86,26 +103,30 @@ public class Manager {
                 globalId++;
                 Epic epic = epics.get(subtask.getParentId());
                 updateEpic(epic);
-                sub.add(subtask);
+                sub.add(epicId);
                 epic.setSubtasks(sub);
             } else {
                 System.out.println("Для создания подзадачи нужен эпик.");
             }
         }
 
+        @Override
         public void clearTask() {
             tasks.clear();
         }
 
+        @Override
         public void clearEpic() {
             epics.clear();
             subtasks.clear();
         }
 
+        @Override
         public void clearSubtask() {
             subtasks.clear();
         }
 
+        @Override
         public void removeTask(long id) {
             if (tasks.containsKey(id)) {
                 tasks.remove(id);
@@ -115,6 +136,7 @@ public class Manager {
             }
         }
 
+        @Override
         public void removeEpic(long id) {
             if (epics.containsKey(id)) {
                 HashSet<Long> set = new HashSet<>();
@@ -131,7 +153,7 @@ public class Manager {
             }
         }
 
-
+        @Override
         public void removeSubtask(long id) {
             if (subtasks.containsKey(id)) {
                 subtasks.remove(id);
@@ -141,6 +163,7 @@ public class Manager {
             }
         }
 
+        @Override
         public ArrayList<Subtask> getEpicSubtasks (long id) {
             ArrayList<Subtask> subtasksList = new ArrayList<>();
                 if (epics.containsKey(id)) {
@@ -155,6 +178,7 @@ public class Manager {
             return subtasksList;
         }
 
+        @Override
         public ArrayList<Task> getTaskList() {
             ArrayList<Task> taskList = new ArrayList<>();
                 for (Task tasks : tasks.values()) {
@@ -163,6 +187,7 @@ public class Manager {
             return taskList;
         }
 
+        @Override
         public ArrayList<Epic> getEpicList() {
             ArrayList<Epic> epicList = new ArrayList<>();
                 for (Epic epics : epics.values()) {
@@ -171,6 +196,7 @@ public class Manager {
             return epicList;
         }
 
+        @Override
         public ArrayList<Subtask> getSubtaskList() {
             ArrayList<Subtask> subtaskList = new ArrayList<>();
                 for (Subtask subtasks : subtasks.values()) {
@@ -179,6 +205,7 @@ public class Manager {
             return subtaskList;
         }
 
+        @Override
         public void updateTask(Task task){
             if(tasks.containsKey(task.getId())) {
                 tasks.put(task.getId(), task);
@@ -187,6 +214,7 @@ public class Manager {
             }
         }
 
+        @Override
         public void updateEpic(Epic epic){
             if(epics.containsKey(epic.getId())) {
                 epic.setStatus(getEpicStatus(epic.getId()));
@@ -196,6 +224,7 @@ public class Manager {
             }
         }
 
+        @Override
         public void updateSubtask(Subtask subtask){
             if(subtasks.containsKey(subtask.getId())) {
                 subtasks.put(subtask.getId(), subtask);
@@ -220,5 +249,12 @@ public class Manager {
            }
             return status;
         }
+
+
+
+    @Override
+    public List<Task> history() {
+        return historyManager.getHistory();
+    }
 
 }
