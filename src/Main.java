@@ -76,6 +76,8 @@ public class Main {
 
         inMemoryTaskManager.updateSubtask(subtaskUpdate2);
 
+        System.out.println("История просмотров: " + inMemoryTaskManager.history());
+
         System.out.println(inMemoryTaskManager.getEpicList());
         System.out.println(inMemoryTaskManager.getTaskList());
         System.out.println(inMemoryTaskManager.getSubtaskList());
@@ -83,6 +85,8 @@ public class Main {
 
         inMemoryTaskManager.removeTask(1);
         inMemoryTaskManager.removeEpic(3);
+
+        System.out.println("История просмотров: " + inMemoryTaskManager.history());
 
         System.out.println(inMemoryTaskManager.getEpicList());
         System.out.println(inMemoryTaskManager.getTaskList());

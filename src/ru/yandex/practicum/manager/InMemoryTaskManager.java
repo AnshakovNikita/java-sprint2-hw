@@ -127,6 +127,7 @@ public class InMemoryTaskManager implements TaskManager {
         public void removeTask(long id) {
             if (tasks.containsKey(id)) {
                 tasks.remove(id);
+                historyManager.remove(id);
                 System.out.println("Задача удалена.");
             } else {
                 System.out.println("Такой задачи нет.");
@@ -144,6 +145,7 @@ public class InMemoryTaskManager implements TaskManager {
                 }
                 subtasks.keySet().removeAll(set);
                 epics.remove(id);
+                historyManager.remove(id);
                 System.out.println("Эпик удален.");
             } else {
                 System.out.println("Такого эпика нет.");
@@ -154,6 +156,7 @@ public class InMemoryTaskManager implements TaskManager {
         public void removeSubtask(long id) {
             if (subtasks.containsKey(id)) {
                 subtasks.remove(id);
+                historyManager.remove(id);
                 System.out.println("Подзадача удалена.");
             } else {
                 System.out.println("Такой подзадачи нет.");
