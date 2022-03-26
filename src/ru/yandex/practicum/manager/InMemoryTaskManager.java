@@ -141,6 +141,7 @@ public class InMemoryTaskManager implements TaskManager {
                 for (Subtask sub : subtasks.values()){
                         if (id == sub.getParentId()) {
                             set.add(sub.getId());
+                            historyManager.remove(sub.getId());
                         }
                 }
                 subtasks.keySet().removeAll(set);
@@ -253,7 +254,7 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     @Override
-    public LinkedList<Task> history() {
+    public ArrayList<Task> history() {
         return historyManager.getHistory();
     }
 

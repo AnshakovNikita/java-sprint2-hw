@@ -2,13 +2,14 @@ package ru.yandex.practicum.manager;
 
 import ru.yandex.practicum.tracker.Task;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+
 
 public interface HistoryManager {
 
     void remove(long id);
 
-    LinkedList<Task> getHistory();
+    ArrayList<Task> getHistory();
 
     void add(Task task);
 }
