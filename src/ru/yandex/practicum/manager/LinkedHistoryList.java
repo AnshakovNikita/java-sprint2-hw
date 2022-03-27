@@ -1,25 +1,30 @@
 package ru.yandex.practicum.manager;
 
+import ru.yandex.practicum.tracker.Task;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class LinkedHistoryList<T> {
-    public Node<T> head;
-    public Node<T> tail;
+    private Node head;
+    private Node tail;
     private int size = 0;
 
 
-    class Node<T> {
-        public T data;
-        public Node<T> next;
-        public Node<T> prev;
-        public Node(T data) {
+
+    class Node {
+        private Task data;
+        private Node next;
+        private Node prev;
+
+        public Node(Task data) {
             this.data = data;
         }
     }
 
-    public Node<T> linkLast(T item) {
+    public Node linkLast(Task item) {
 
-        Node newNode = new Node<T>(item);
+        Node newNode = new Node(item);
 
 
         if (head == null) {
@@ -56,9 +61,9 @@ public class LinkedHistoryList<T> {
         size--;
     }
 
-    public ArrayList<T> getTasks() {
-        ArrayList<T> result = new ArrayList<T>();
-        Node<T> current = head;
+    public List<Task> getTasks() {
+        List<Task> result = new ArrayList<>();
+        Node current = head;
 
         while (current != null) {
             result.add(current.data);
@@ -71,10 +76,27 @@ public class LinkedHistoryList<T> {
         return size;
     }
 
-    public T getFirst() {
+    public Task getFirst() {
         return head.data;
     }
 
+    public Node getHead() {
+        return head;
+    }
 
+    public void setHead(Node head) {
+        this.head = head;
+    }
 
+    public Node getTail() {
+        return tail;
+    }
+
+    public void setTail(Node tail) {
+        this.tail = tail;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
 }
