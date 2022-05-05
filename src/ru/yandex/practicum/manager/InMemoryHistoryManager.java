@@ -2,9 +2,8 @@ package ru.yandex.practicum.manager;
 
 import ru.yandex.practicum.tracker.Task;
 
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class InMemoryHistoryManager implements HistoryManager {
@@ -12,16 +11,31 @@ public class InMemoryHistoryManager implements HistoryManager {
     Map<Long, LinkedHistoryList.Node> historyTaskPosition = new HashMap<>();
     static final byte MAX_HISTORY_LENGTH = 10;
 
+
+    static String toString(HistoryManager manager) {
+        List<String> historyIds = manager.getHistory().stream().map( item -> String.valueOf(item)).collect(Collectors.toList());
+
+        return String.join(",", historyIds);
+    }
+
+    static List<Long> fromString(String value) {
+        return Arrays.asList(value.split(","))
+                .stream()
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+    }
+
+
     @Override
-    public void add(Task task) {
+    public void add(Long taskId) {
         if (history.getSize() > 0 && history.getSize() > MAX_HISTORY_LENGTH) {
-            remove(history.getFirst().getId());
+            remove(history.getFirst());
         }
-        if (historyTaskPosition.containsKey(task.getId())) {
-            remove(task.getId());
+        if (historyTaskPosition.containsKey(taskId)) {
+            remove(taskId);
         }
-        LinkedHistoryList.Node newNode = history.linkLast(task);
-            historyTaskPosition.put(task.getId(), newNode);
+        LinkedHistoryList.Node newNode = history.linkLast(taskId);
+            historyTaskPosition.put(taskId, newNode);
     }
 
     @Override
@@ -32,7 +46,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public List<Task> getHistory() {
+    public List<Long> getHistory() {
         return history.getTasks();
     }
 

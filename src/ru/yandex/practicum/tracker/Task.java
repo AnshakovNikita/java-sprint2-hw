@@ -1,5 +1,7 @@
 package ru.yandex.practicum.tracker;
 
+import ru.yandex.practicum.manager.TypeTasks;
+
 public class Task {
     public String name;
     public String description;
@@ -13,10 +15,25 @@ public class Task {
     }
 
 
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 
     @Override
     public String toString() {
-        return "Id: " + id + " Название: " + name + " Описание: " + description + " Статус: " + status;
+        return id + "," + TypeTasks.TASK + "," + name + "," + status + "," + description + ",";
+    }
+
+    public static Task fromString(String value) {
+        String[] splittedValue = value.split(",");
+        Task task = new Task(splittedValue[2], splittedValue[4]);
+        task.id = Long.parseLong(splittedValue[0]);
+        task.status = Status.valueOf(splittedValue[3]);
+        return task;
     }
 
     public void setStatus(Status status) {

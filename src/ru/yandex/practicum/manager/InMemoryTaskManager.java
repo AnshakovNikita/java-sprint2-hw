@@ -5,6 +5,7 @@ import ru.yandex.practicum.tracker.Subtask;
 import ru.yandex.practicum.tracker.Task;
 import ru.yandex.practicum.tracker.Status;
 
+import java.io.IOException;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -14,10 +15,20 @@ public class InMemoryTaskManager implements TaskManager {
     HashMap<Long, Subtask> subtasks = new HashMap<>();
     ArrayList<Long> sub = new ArrayList<>();
     long globalId = 1;
-    private static HistoryManager historyManager = Managers.getDefaultHistory();
+    protected static HistoryManager historyManager = Managers.getDefaultHistory();
 
-        @Override
-        public Task getTask(long id) {
+    @Override
+    public String toString(Task task) {
+        return null;
+    }
+
+    @Override
+    public String toString(Epic epic) {
+        return null;
+    }
+
+    @Override
+        public Task getTask(long id) throws IOException {
             Task taskCopy = new Task("", "");
             Task task = null;
             if (tasks.containsKey(id)) {
@@ -26,7 +37,7 @@ public class InMemoryTaskManager implements TaskManager {
                 taskCopy.name = task.name;
                 taskCopy.description = task.description;
                 taskCopy.setStatus(task.getStatus());
-                historyManager.add(taskCopy);
+                historyManager.add(task.getId());
             } else {
                 System.out.println("такого нет");
             }
@@ -34,7 +45,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public Epic getEpic(long id) {
+        public Epic getEpic(long id) throws IOException {
             Epic epicCopy = new Epic("", "");
             Epic epic = null;
             if (epics.containsKey(id)) {
@@ -43,22 +54,15 @@ public class InMemoryTaskManager implements TaskManager {
                 epicCopy.name = epic.name;
                 epicCopy.description = epic.description;
                 epicCopy.setStatus(epic.getStatus());
-                historyManager.add(epicCopy);
+                historyManager.add(epic.getId());
             } else {
                 System.out.println("такого нет");
             }
             return epicCopy;
         }
-        /* Можно попробовать так
-        public Epic getEpic(int id) {
-            return epics.get(id);
-        }
-
-        замечание прошлого ревью. Если так сделать, то при создании нового объекта,
-        он будет обновляться до метода updateEpic*/
 
         @Override
-        public Subtask getSubtask(long id) {
+        public Subtask getSubtask(long id) throws IOException {
             Subtask subtaskCopy = new Subtask("", "");
             Subtask subtask = null;
             if (subtasks.containsKey(id)) {
@@ -68,7 +72,7 @@ public class InMemoryTaskManager implements TaskManager {
                 subtaskCopy.description = subtask.description;
                 subtaskCopy.setStatus(subtask.getStatus());
                 subtaskCopy.setParentId(subtask.getParentId());
-                historyManager.add(subtaskCopy);
+                historyManager.add(subtask.getId());
             } else {
                 System.out.println("такого нет");
             }
@@ -76,28 +80,33 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public void addTask(Task task) {
-            task.setId(globalId);
-            tasks.put(globalId, task);
-            globalId++;
+        public void addTask(Task task) throws IOException {
+            if (task.getId() == 0){
+                task.setId(globalId);
+                globalId++;
+            }
+                tasks.put(task.getId(), task);
         }
 
         @Override
-        public void addEpic(Epic epic) {
-            epic.setId(globalId);
-            epics.put(globalId, epic);
-            globalId++;
+        public void addEpic(Epic epic) throws IOException {
+            if (epic.getId() == 0) {
+                epic.setId(globalId);
+                globalId++;
+            }
+            epics.put(epic.getId(), epic);
         }
 
         @Override
-        public void addSubtask(Subtask subtask, long epicId) {
-
+        public void addSubtask(Subtask subtask, long epicId) throws IOException {
             if (epics.containsKey(epicId)) {
                 epics.get(epicId);
-                subtask.setId(globalId);
+                if (subtask.getId() == 0) {
+                    subtask.setId(globalId);
+                    globalId++;
+                }
                 subtask.setParentId(epicId);
-                subtasks.put(globalId, subtask);
-                globalId++;
+                subtasks.put(subtask.getId(), subtask);
                 Epic epic = epics.get(subtask.getParentId());
                 updateEpic(epic);
                 sub.add(epicId);
@@ -108,23 +117,23 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public void clearTask() {
+        public void clearTask() throws IOException {
             tasks.clear();
         }
 
         @Override
-        public void clearEpic() {
+        public void clearEpic() throws IOException {
             epics.clear();
             subtasks.clear();
         }
 
         @Override
-        public void clearSubtask() {
+        public void clearSubtask() throws IOException {
             subtasks.clear();
         }
 
         @Override
-        public void removeTask(long id) {
+        public void removeTask(long id) throws IOException {
             if (tasks.containsKey(id)) {
                 tasks.remove(id);
                 historyManager.remove(id);
@@ -135,7 +144,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public void removeEpic(long id) {
+        public void removeEpic(long id) throws IOException {
             if (epics.containsKey(id)) {
                 HashSet<Long> set = new HashSet<>();
                 for (Subtask sub : subtasks.values()){
@@ -154,7 +163,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public void removeSubtask(long id) {
+        public void removeSubtask(long id) throws IOException {
             if (subtasks.containsKey(id)) {
                 subtasks.remove(id);
                 historyManager.remove(id);
@@ -207,7 +216,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public void updateTask(Task task){
+        public void updateTask(Task task) throws IOException {
             if(tasks.containsKey(task.getId())) {
                 tasks.put(task.getId(), task);
             } else {
@@ -216,7 +225,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public void updateEpic(Epic epic){
+        public void updateEpic(Epic epic) throws IOException {
             if(epics.containsKey(epic.getId())) {
                 epic.setStatus(getEpicStatus(epic.getId()));
                 epics.put(epic.getId(), epic);
@@ -226,7 +235,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public void updateSubtask(Subtask subtask){
+        public void updateSubtask(Subtask subtask) throws IOException {
             if(subtasks.containsKey(subtask.getId())) {
                 subtasks.put(subtask.getId(), subtask);
                 Epic epic = epics.get(subtask.getParentId());
@@ -254,7 +263,7 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     @Override
-    public List<Task> history() {
+    public List<Long> history() throws IOException {
         return historyManager.getHistory();
     }
 

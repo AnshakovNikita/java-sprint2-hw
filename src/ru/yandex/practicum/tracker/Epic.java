@@ -1,5 +1,7 @@
 package ru.yandex.practicum.tracker;
 
+import ru.yandex.practicum.manager.TypeTasks;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {
@@ -7,6 +9,19 @@ public class Epic extends Task {
 
     public Epic(String name, String description) {
         super(name, description);
+    }
+
+    @Override
+    public String toString() {
+        return getId() + "," + TypeTasks.EPIC + "," + name + "," + getStatus() + "," + description + ",";
+    }
+
+    public static Epic fromString(String value) {
+        String[] splittedValue = value.split(",");
+        Epic epic = new Epic(splittedValue[2], splittedValue[4]);
+        epic.setId(Long.parseLong(splittedValue[0]));
+        epic.setStatus(Status.valueOf(splittedValue[3]));
+        return epic;
     }
 
 

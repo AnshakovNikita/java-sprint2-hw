@@ -3,34 +3,40 @@ package ru.yandex.practicum.manager;
 import ru.yandex.practicum.tracker.Epic;
 import ru.yandex.practicum.tracker.Subtask;
 import ru.yandex.practicum.tracker.Task;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
 
-    Task getTask(long id);
+    String toString(Task task);
 
-    Epic getEpic(long id);
+    String toString(Epic epic);
 
-    Subtask getSubtask(long id);
+    Task getTask(long id) throws IOException;
 
-    void addTask(Task task);
+    Epic getEpic(long id) throws IOException;
 
-    void addEpic(Epic epic);
+    Subtask getSubtask(long id) throws IOException;
 
-    void addSubtask(Subtask subtask, long epicId);
+    void addTask(Task task) throws IOException;
 
-    void clearTask();
+    void addEpic(Epic epic) throws IOException;
 
-    void clearEpic();
+    void addSubtask(Subtask subtask, long epicId) throws IOException;
 
-    void clearSubtask();
+    void clearTask() throws IOException;
 
-    void removeTask(long id);
+    void clearEpic() throws IOException;
 
-    void removeEpic(long id);
+    void clearSubtask() throws IOException;
 
-    void removeSubtask(long id);
+    void removeTask(long id) throws IOException;
+
+    void removeEpic(long id) throws IOException;
+
+    void removeSubtask(long id) throws IOException;
 
     ArrayList<Subtask> getEpicSubtasks(long id);
 
@@ -40,11 +46,11 @@ public interface TaskManager {
 
     ArrayList<Subtask> getSubtaskList();
 
-    void updateTask(Task task);
+    void updateTask(Task task) throws IOException;
 
-    void updateEpic(Epic epic);
+    void updateEpic(Epic epic) throws IOException;
 
-    void updateSubtask(Subtask subtask);
+    void updateSubtask(Subtask subtask) throws IOException;
 
-    List<Task> history();
+    List<Long> history() throws IOException;
 }

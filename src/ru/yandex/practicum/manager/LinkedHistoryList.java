@@ -13,16 +13,16 @@ public class LinkedHistoryList<T> {
 
 
     class Node {
-        private Task data;
+        private Long data;
         private Node next;
         private Node prev;
 
-        public Node(Task data) {
+        public Node(Long data) {
             this.data = data;
         }
     }
 
-    public Node linkLast(Task item) {
+    public Node linkLast(Long item) {
 
         Node newNode = new Node(item);
 
@@ -61,8 +61,8 @@ public class LinkedHistoryList<T> {
         size--;
     }
 
-    public List<Task> getTasks() {
-        List<Task> result = new ArrayList<>();
+    public List<Long> getTasks() {
+        List<Long> result = new ArrayList<>();
         Node current = head;
 
         while (current != null) {
@@ -76,7 +76,7 @@ public class LinkedHistoryList<T> {
         return size;
     }
 
-    public Task getFirst() {
+    public Long getFirst() {
         return head.data;
     }
 
