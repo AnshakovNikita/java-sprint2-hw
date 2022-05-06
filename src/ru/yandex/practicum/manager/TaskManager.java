@@ -4,7 +4,6 @@ import ru.yandex.practicum.tracker.Epic;
 import ru.yandex.practicum.tracker.Subtask;
 import ru.yandex.practicum.tracker.Task;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,29 +13,29 @@ public interface TaskManager {
 
     String toString(Epic epic);
 
-    Task getTask(long id) throws IOException;
+    Task getTask(long id) throws ManagerSaveException;
 
-    Epic getEpic(long id) throws IOException;
+    Epic getEpic(long id) throws ManagerSaveException;
 
-    Subtask getSubtask(long id) throws IOException;
+    Subtask getSubtask(long id) throws ManagerSaveException;
 
-    void addTask(Task task) throws IOException;
+    void addTask(Task task) throws ManagerSaveException;
 
-    void addEpic(Epic epic) throws IOException;
+    void addEpic(Epic epic) throws ManagerSaveException;
 
-    void addSubtask(Subtask subtask, long epicId) throws IOException;
+    void addSubtask(Subtask subtask, long epicId) throws ManagerSaveException;
 
-    void clearTask() throws IOException;
+    void clearTask() throws ManagerSaveException;
 
-    void clearEpic() throws IOException;
+    void clearEpic() throws ManagerSaveException;
 
-    void clearSubtask() throws IOException;
+    void clearSubtask() throws ManagerSaveException;
 
-    void removeTask(long id) throws IOException;
+    void removeTask(long id) throws ManagerSaveException;
 
-    void removeEpic(long id) throws IOException;
+    void removeEpic(long id) throws ManagerSaveException;
 
-    void removeSubtask(long id) throws IOException;
+    void removeSubtask(long id) throws ManagerSaveException;
 
     ArrayList<Subtask> getEpicSubtasks(long id);
 
@@ -46,11 +45,11 @@ public interface TaskManager {
 
     ArrayList<Subtask> getSubtaskList();
 
-    void updateTask(Task task) throws IOException;
+    void updateTask(Task task) throws ManagerSaveException;
 
-    void updateEpic(Epic epic) throws IOException;
+    void updateEpic(Epic epic) throws ManagerSaveException;
 
-    void updateSubtask(Subtask subtask) throws IOException;
+    void updateSubtask(Subtask subtask) throws ManagerSaveException;
 
-    List<Long> history() throws IOException;
+    List<Long> history() throws ManagerSaveException;
 }

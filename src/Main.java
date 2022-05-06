@@ -1,13 +1,9 @@
 import ru.yandex.practicum.manager.FileBackedTasksManager;
-import ru.yandex.practicum.tracker.Epic;
-import ru.yandex.practicum.tracker.Subtask;
-import ru.yandex.practicum.tracker.Task;
+import ru.yandex.practicum.manager.ManagerSaveException;
 
-import java.io.File;
-import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws ManagerSaveException {
             FileBackedTasksManager.main(args);
     }
 }
