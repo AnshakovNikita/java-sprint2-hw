@@ -1,9 +1,10 @@
 package ru.yandex.practicum.manager;
 
+import ru.yandex.practicum.Exception.ManagerSaveException;
 import ru.yandex.practicum.tracker.Epic;
 import ru.yandex.practicum.tracker.Subtask;
 import ru.yandex.practicum.tracker.Task;
-import ru.yandex.practicum.tracker.Status;
+import ru.yandex.practicum.Enum.Status;
 
 import java.util.*;
 
@@ -12,21 +13,20 @@ public class InMemoryTaskManager implements TaskManager {
     HashMap<Long, Task> tasks = new HashMap<>();
     HashMap<Long, Epic> epics = new HashMap<>();
     HashMap<Long, Subtask> subtasks = new HashMap<>();
-    ArrayList<Long> sub = new ArrayList<>();
     long globalId = 1;
     protected static HistoryManager historyManager = Managers.getDefaultHistory();
 
-    @Override
-    public String toString(Task task) {
+        @Override
+        public String toString(Task task) {
         return null;
     }
 
-    @Override
-    public String toString(Epic epic) {
+        @Override
+        public String toString(Epic epic) {
         return null;
     }
 
-    @Override
+        @Override
         public Task getTask(long id) {
             Task taskCopy = new Task("", "");
             Task task = null;
@@ -99,17 +99,17 @@ public class InMemoryTaskManager implements TaskManager {
         @Override
         public void addSubtask(Subtask subtask, long epicId) throws ManagerSaveException {
             if (epics.containsKey(epicId)) {
-                epics.get(epicId);
                 if (subtask.getId() == 0) {
                     subtask.setId(globalId);
                     globalId++;
                 }
                 subtask.setParentId(epicId);
                 subtasks.put(subtask.getId(), subtask);
-                Epic epic = epics.get(subtask.getParentId());
+                Epic epic = epics.get(epicId);
+                ArrayList<Long> epicSubtasks = epic.getSubtasks();
+                epicSubtasks.add(subtask.getId());
+                epic.setSubtasks(epicSubtasks);
                 updateEpic(epic);
-                sub.add(epicId);
-                epic.setSubtasks(sub);
             } else {
                 System.out.println("Для создания подзадачи нужен эпик.");
             }
@@ -246,7 +246,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         public Status getEpicStatus(long id) {
            Status status = Status.NEW;
-           ArrayList < Subtask > sub = getEpicSubtasks(id);
+           ArrayList <Subtask> sub = getEpicSubtasks(id);
            for (int i = 0 ; i < sub.size() ; i++) {
                if (i == 0) {
                    status = sub.get(i).getStatus();
@@ -260,10 +260,9 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
 
-
-    @Override
-    public List<Long> history() throws ManagerSaveException {
-        return historyManager.getHistory();
-    }
+        @Override
+        public List<Long> history() throws ManagerSaveException {
+            return historyManager.getHistory();
+        }
 
 }

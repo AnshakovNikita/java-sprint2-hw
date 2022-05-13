@@ -1,6 +1,7 @@
 package ru.yandex.practicum.tracker;
 
-import ru.yandex.practicum.manager.TypeTasks;
+import ru.yandex.practicum.Enum.Status;
+import ru.yandex.practicum.Enum.TypeTasks;
 
 public class Subtask extends Task {
 
