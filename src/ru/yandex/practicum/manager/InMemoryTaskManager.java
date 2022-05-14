@@ -14,7 +14,7 @@ public class InMemoryTaskManager implements TaskManager {
     HashMap<Long, Epic> epics = new HashMap<>();
     HashMap<Long, Subtask> subtasks = new HashMap<>();
     long globalId = 1;
-    protected static HistoryManager historyManager = Managers.getDefaultHistory();
+    public static HistoryManager historyManager = Managers.getDefaultHistory();
 
         @Override
         public String toString(Task task) {
@@ -38,6 +38,7 @@ public class InMemoryTaskManager implements TaskManager {
                 taskCopy.setStatus(task.getStatus());
                 historyManager.add(task.getId());
             } else {
+                taskCopy = null;
                 System.out.println("такого нет");
             }
             return taskCopy;
@@ -55,6 +56,7 @@ public class InMemoryTaskManager implements TaskManager {
                 epicCopy.setStatus(epic.getStatus());
                 historyManager.add(epic.getId());
             } else {
+                epicCopy = null;
                 System.out.println("такого нет");
             }
             return epicCopy;
@@ -73,6 +75,7 @@ public class InMemoryTaskManager implements TaskManager {
                 subtaskCopy.setParentId(subtask.getParentId());
                 historyManager.add(subtask.getId());
             } else {
+                subtaskCopy = null;
                 System.out.println("такого нет");
             }
             return subtaskCopy;
@@ -244,6 +247,7 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
 
+        @Override
         public Status getEpicStatus(long id) {
            Status status = Status.NEW;
            ArrayList <Subtask> sub = getEpicSubtasks(id);

@@ -1,5 +1,6 @@
 package ru.yandex.practicum.manager;
 
+import ru.yandex.practicum.Enum.Status;
 import ru.yandex.practicum.Exception.ManagerSaveException;
 import ru.yandex.practicum.tracker.Epic;
 import ru.yandex.practicum.tracker.Subtask;
@@ -53,4 +54,6 @@ public interface TaskManager {
     void updateSubtask(Subtask subtask) throws ManagerSaveException;
 
     List<Long> history() throws ManagerSaveException;
+
+    Status getEpicStatus(long id);
 }
