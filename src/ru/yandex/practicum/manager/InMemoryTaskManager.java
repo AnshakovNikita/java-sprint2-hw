@@ -132,6 +132,9 @@ public class InMemoryTaskManager implements TaskManager {
         @Override
         public void clearSubtask() throws ManagerSaveException {
             subtasks.clear();
+            for(Epic epic : epics.values()){
+                updateEpic(epic);
+            }
         }
 
         @Override
@@ -267,6 +270,11 @@ public class InMemoryTaskManager implements TaskManager {
         @Override
         public List<Long> history() throws ManagerSaveException {
             return historyManager.getHistory();
+        }
+
+        @Override
+        public void clearHistory() throws ManagerSaveException {
+            historyManager.clearAll();
         }
 
 }

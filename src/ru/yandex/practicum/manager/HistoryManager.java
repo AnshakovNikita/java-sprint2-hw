@@ -10,4 +10,6 @@ public interface HistoryManager {
     List<Long> getHistory();
 
     void add(Long taskId);
+
+    void clearAll();
 }

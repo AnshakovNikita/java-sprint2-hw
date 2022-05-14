@@ -56,4 +56,6 @@ public interface TaskManager {
     List<Long> history() throws ManagerSaveException;
 
     Status getEpicStatus(long id);
+
+    void clearHistory() throws ManagerSaveException;
 }

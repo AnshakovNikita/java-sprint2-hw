@@ -50,4 +50,9 @@ public class InMemoryHistoryManager implements HistoryManager {
         return history.getTasks();
     }
 
+    @Override
+    public void clearAll() {
+        history.clear();
+    }
+
 }

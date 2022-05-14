@@ -98,4 +98,10 @@ public class LinkedHistoryList<T> {
     public void setSize(int size) {
         this.size = size;
     }
+
+    public void clear() {
+        tail = null;
+        head = null;
+        size = 0;
+    }
 }

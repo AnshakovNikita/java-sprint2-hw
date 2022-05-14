@@ -201,6 +201,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         return super.history();
     }
 
+    @Override
+    public void clearHistory() throws ManagerSaveException {
+        super.clearHistory();
+        save();
+    }
+
     public static void main(String[] args) throws ManagerSaveException {
         File file = new File("C://Users//NikitaKub//IdeaProjects//java-sprint2-hw", "FileBackedTasks.csv");
 

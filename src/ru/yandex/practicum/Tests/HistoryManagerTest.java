@@ -34,6 +34,7 @@ class HistoryManagerTest {
 
         @Test
         public void shouldBeEmpty() throws ManagerSaveException {
+            inMemoryTaskManager.clearHistory();
             assertTrue(inMemoryTaskManager.history().isEmpty());
         }
 

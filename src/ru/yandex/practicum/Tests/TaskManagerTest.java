@@ -68,7 +68,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void clearTask() throws ManagerSaveException {
-        addTask();
         taskManager.clearTask();
 
         assertEquals(0, taskManager.getTaskList().size());
@@ -76,7 +75,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void clearEpic() throws ManagerSaveException {
-        addEpic();
         taskManager.clearEpic();
 
         assertEquals(0, taskManager.getEpicList().size());
@@ -84,7 +82,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void clearSubtask() throws ManagerSaveException {
-        addSubtask();
         taskManager.clearSubtask();
 
         assertEquals(0, taskManager.getSubtaskList().size());
@@ -138,7 +135,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.updateTask(taskUpdate);
 
         assertEquals(taskUpdate.toString(), taskManager.getTask(task.getId()).toString());
-
     }
 
     @Test
