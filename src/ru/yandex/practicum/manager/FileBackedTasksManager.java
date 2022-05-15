@@ -8,7 +8,9 @@ import ru.yandex.practicum.tracker.Task;
 
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager  {
 
@@ -65,7 +67,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     public void save() throws ManagerSaveException {
         try {
             Writer fileWriter = new FileWriter(file);
-            fileWriter.write("id,type,name,status,description,epic");
+            fileWriter.write("id,type,name,status,description,epic,duration,startTime, endTime");
             fileWriter.write("\n");
 
             for (Task task : tasks.values()) {
@@ -212,20 +214,47 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 
         FileBackedTasksManager fileBackedTasksManager1 = FileBackedTasksManager.loadFromFile(file);
 
+        Task task1 = new Task("Задача1", "описание1");
+        task1.setDuration(10);
+        task1.setStartTime(Optional.of(LocalDateTime.now()));
 
-        fileBackedTasksManager1.addTask(new Task("Задача1", "описание1"));
+        Task task2 = new Task("Задача2", "описание1");
+        //task2.setDuration(15);
+        //task2.setStartTime(Optional.of(LocalDateTime.now()));
+
+        Task task3 = new Task("Задача3", "описание1");
+        task3.setDuration(9);
+        task3.setStartTime(Optional.of(LocalDateTime.now().plusMinutes(80)));
+
+
+
+        fileBackedTasksManager1.addTask(task1);
+        fileBackedTasksManager1.addTask(task2);
+        fileBackedTasksManager1.addTask(task3);
         fileBackedTasksManager1.addEpic(new Epic("Эпик1", "Описание3"));
-        fileBackedTasksManager1.addSubtask(new Subtask("Подзадача1эпик1", "Описание4"), 2);
-        fileBackedTasksManager1.addTask(new Task("Задача2", "описание2"));
+
+        Subtask subtask1 = new Subtask("Подзадача1эпик1", "Описание4");
+        subtask1.setDuration(5);
+        subtask1.setStartTime(Optional.of(LocalDateTime.now().plusMinutes(300)));
+
+        Subtask subtask2 = new Subtask("Подзадача2эпик1", "Описание4");
+        subtask2.setDuration(30);
+        subtask2.setStartTime(Optional.of(LocalDateTime.now().plusMinutes(90)));
+
+        fileBackedTasksManager1.addSubtask(subtask1, 4);
+        fileBackedTasksManager1.addSubtask(subtask2, 4);
 
 
-        fileBackedTasksManager1.getEpic(2);
+
+        fileBackedTasksManager1.getEpic(4);
         fileBackedTasksManager1.getTask(1);
-        fileBackedTasksManager1.getSubtask(3);
+        fileBackedTasksManager1.getSubtask(5);
         fileBackedTasksManager1.history();
 
+        System.out.println(fileBackedTasksManager1.getPrioritizedTasks());
 
-        FileBackedTasksManager fileBackedTasksManager2 = FileBackedTasksManager.loadFromFile(file);
+
+        /*FileBackedTasksManager fileBackedTasksManager2 = FileBackedTasksManager.loadFromFile(file);
 
 
         System.out.println("fileBackedTasksManager1");
@@ -238,6 +267,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         System.out.println(fileBackedTasksManager2.tasks);
         System.out.println(fileBackedTasksManager2.epics);
         System.out.println(fileBackedTasksManager2.subtasks);
-        System.out.println(fileBackedTasksManager2.history());
+        System.out.println(fileBackedTasksManager2.history()); */
     }
 }

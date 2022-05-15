@@ -3,7 +3,9 @@ package ru.yandex.practicum.tracker;
 import ru.yandex.practicum.Enum.Status;
 import ru.yandex.practicum.Enum.TypeTasks;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class Epic extends Task {
     protected ArrayList<Long> subtasks = new ArrayList<>();
@@ -14,7 +16,10 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return getId() + "," + TypeTasks.EPIC + "," + name + "," + getStatus() + "," + description + ",";
+        String startTime = optionalTimeToString(getStartTime());
+        String endTime = optionalTimeToString(getEndTime());
+        return getId() + "," + TypeTasks.EPIC + "," + name + "," + getStatus() + "," + description + "," + "," + getDuration() + ","
+                 + startTime + "," + endTime + ",";
     }
 
     public static Epic fromString(String value) {
@@ -22,6 +27,10 @@ public class Epic extends Task {
         Epic epic = new Epic(splittedValue[2], splittedValue[4]);
         epic.setId(Long.parseLong(splittedValue[0]));
         epic.setStatus(Status.valueOf(splittedValue[3]));
+        epic.setDuration(Long.parseLong(splittedValue[6]));
+        if(splittedValue.length > 7) {
+            epic.setStartTime(Optional.of(LocalDateTime.parse(splittedValue[7], formatter)));
+        }
         return epic;
     }
 

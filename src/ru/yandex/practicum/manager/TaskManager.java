@@ -6,8 +6,12 @@ import ru.yandex.practicum.tracker.Epic;
 import ru.yandex.practicum.tracker.Subtask;
 import ru.yandex.practicum.tracker.Task;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.TreeSet;
 
 public interface TaskManager {
 
@@ -58,4 +62,12 @@ public interface TaskManager {
     Status getEpicStatus(long id);
 
     void clearHistory() throws ManagerSaveException;
+
+    long getEpicDuration(long id);
+
+    Optional<LocalDateTime> getEpicStartTime(long id);
+
+    TreeSet<Task> getPrioritizedTasks();
+
+    boolean hasIntersections();
 }
