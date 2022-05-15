@@ -14,7 +14,7 @@ public class Task {
     private Status status;
     private long duration = 0;
     private Optional<LocalDateTime> startTime;
-    protected static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+    protected static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
 
 
@@ -36,7 +36,7 @@ public class Task {
     public String toString() {
         String startTime = optionalTimeToString(getStartTime());
         String endTime = optionalTimeToString(getEndTime());
-        return id + "," + TypeTasks.TASK + "," + name + "," + status + "," + description + "," + "," + duration + ","
+        return id + "," + TypeTasks.TASK + "," + name + "," + status + "," + description + "," + duration + ","
                 + startTime + "," + endTime + ",";
     }
 
@@ -45,9 +45,9 @@ public class Task {
         Task task = new Task(splittedValue[2], splittedValue[4]);
         task.id = Long.parseLong(splittedValue[0]);
         task.status = Status.valueOf(splittedValue[3]);
-        task.duration = Long.parseLong(splittedValue[6]);
-        if(splittedValue.length > 7) {
-            task.startTime = Optional.of(LocalDateTime.parse(splittedValue[7], formatter));
+        task.duration = Long.parseLong(splittedValue[5]);
+        if(splittedValue.length > 6) {
+            task.startTime = Optional.of(LocalDateTime.parse(splittedValue[6], formatter));
         }
         return task;
     }

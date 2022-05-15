@@ -18,7 +18,7 @@ public class Epic extends Task {
     public String toString() {
         String startTime = optionalTimeToString(getStartTime());
         String endTime = optionalTimeToString(getEndTime());
-        return getId() + "," + TypeTasks.EPIC + "," + name + "," + getStatus() + "," + description + "," + "," + getDuration() + ","
+        return getId() + "," + TypeTasks.EPIC + "," + name + "," + getStatus() + "," + description + "," + getDuration() + ","
                  + startTime + "," + endTime + ",";
     }
 
@@ -27,9 +27,9 @@ public class Epic extends Task {
         Epic epic = new Epic(splittedValue[2], splittedValue[4]);
         epic.setId(Long.parseLong(splittedValue[0]));
         epic.setStatus(Status.valueOf(splittedValue[3]));
-        epic.setDuration(Long.parseLong(splittedValue[6]));
-        if(splittedValue.length > 7) {
-            epic.setStartTime(Optional.of(LocalDateTime.parse(splittedValue[7], formatter)));
+        epic.setDuration(Long.parseLong(splittedValue[5]));
+        if(splittedValue.length > 6) {
+            epic.setStartTime(Optional.of(LocalDateTime.parse(splittedValue[6], formatter)));
         }
         return epic;
     }

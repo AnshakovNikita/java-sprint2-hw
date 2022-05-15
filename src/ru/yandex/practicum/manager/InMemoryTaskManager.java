@@ -52,6 +52,8 @@ public class InMemoryTaskManager implements TaskManager {
                 taskCopy.name = task.name;
                 taskCopy.description = task.description;
                 taskCopy.setStatus(task.getStatus());
+                taskCopy.setDuration(task.getDuration());
+                taskCopy.setStartTime(task.getStartTime());
                 historyManager.add(task.getId());
             } else {
                 taskCopy = null;
@@ -70,6 +72,8 @@ public class InMemoryTaskManager implements TaskManager {
                 epicCopy.name = epic.name;
                 epicCopy.description = epic.description;
                 epicCopy.setStatus(epic.getStatus());
+                epicCopy.setDuration(epic.getDuration());
+                epicCopy.setStartTime(epic.getStartTime());
                 historyManager.add(epic.getId());
             } else {
                 epicCopy = null;
@@ -89,6 +93,8 @@ public class InMemoryTaskManager implements TaskManager {
                 subtaskCopy.description = subtask.description;
                 subtaskCopy.setStatus(subtask.getStatus());
                 subtaskCopy.setParentId(subtask.getParentId());
+                subtaskCopy.setDuration(subtask.getDuration());
+                subtaskCopy.setStartTime(subtask.getStartTime());
                 historyManager.add(subtask.getId());
             } else {
                 subtaskCopy = null;

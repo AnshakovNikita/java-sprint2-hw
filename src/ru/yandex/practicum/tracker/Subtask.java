@@ -27,8 +27,8 @@ public class Subtask extends Task {
     public String toString() {
         String startTime = optionalTimeToString(getStartTime());
         String endTime = optionalTimeToString(getEndTime());
-        return getId() + "," + TypeTasks.SUBTASK + "," + name + "," + getStatus() + ","  + description + "," + parentId + "," + getDuration() + ","
-                + startTime + "," + endTime + ",";
+        return getId() + "," + TypeTasks.SUBTASK + "," + name + "," + getStatus() + ","  + description + "," + getDuration() + ","
+                + startTime + "," + endTime + "," + parentId ;
     }
 
     public static Subtask fromString(String value) {
@@ -36,10 +36,10 @@ public class Subtask extends Task {
         Subtask subtask = new Subtask(splittedValue[2], splittedValue[4]);
         subtask.setId(Long.parseLong(splittedValue[0]));
         subtask.setStatus(Status.valueOf(splittedValue[3]));
-        subtask.setParentId(Long.parseLong(splittedValue[5]));
-        subtask.setDuration(Long.parseLong(splittedValue[6]));
-        if(splittedValue.length > 7) {
-            subtask.setStartTime(Optional.of(LocalDateTime.parse(splittedValue[7], formatter)));
+        subtask.setParentId(Long.parseLong(splittedValue[8]));
+        subtask.setDuration(Long.parseLong(splittedValue[5]));
+        if(splittedValue.length > 6) {
+            subtask.setStartTime(Optional.of(LocalDateTime.parse(splittedValue[6], formatter)));
         }
         return subtask;
     }

@@ -8,7 +8,9 @@ import ru.yandex.practicum.tracker.Epic;
 import ru.yandex.practicum.tracker.Subtask;
 import ru.yandex.practicum.tracker.Task;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,12 +27,22 @@ abstract class TaskManagerTest<T extends TaskManager> {
     void addTask() throws ManagerSaveException {
         assertEquals(0, taskManager.getTaskList().size(), "Список задач не пустой.");
         Task task = new Task("задача1", "описание1");
+        Task task2 = new Task("задача2", "описание2");
 
         assertNotNull(task.getId(), "Id задачи некорректен.");
 
+        task.setDuration(10);
+        task.setStartTime(Optional.of(LocalDateTime.now()));
+
+        task2.setDuration(10);
+        task2.setStartTime(Optional.of(LocalDateTime.now().plusMinutes(5)));
+
         taskManager.addTask(task);
+        taskManager.addTask(task2);
+
 
         assertTrue(taskManager.getTaskList().contains(task), "Задача не добавилась.");
+        assertFalse(taskManager.getTaskList().contains(task2), "Пересекаемая задача добавилась.");
     }
 
     @Test
@@ -52,16 +64,35 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         Epic epic = new Epic("эпик1", "описание1");
         Subtask subtask = new Subtask("подзадача1", "описани1");
+        Subtask subtask2 = new Subtask("подзадача2", "описани2");
+        Subtask subtask3 = new Subtask("подзадача3", "описани3");
 
         taskManager.addEpic(epic);
 
         assertNotNull(subtask.getId(), "Id подзадачи некорректен.");
 
-        taskManager.addSubtask(subtask, epic.getId());
+        subtask.setDuration(10);
+        subtask.setStartTime(Optional.of(LocalDateTime.now().plusMinutes(50)));
 
-        assertNotNull(taskManager.getEpic(subtask.getParentId()));
+        subtask2.setDuration(10);
+        subtask2.setStartTime(Optional.of(LocalDateTime.now().plusMinutes(51)));
+
+        subtask3.setDuration(10);
+        subtask3.setStartTime(Optional.of(LocalDateTime.now().plusMinutes(71)));
+
+        taskManager.addSubtask(subtask, epic.getId());
+        taskManager.addSubtask(subtask2, epic.getId());
+        taskManager.addSubtask(subtask3, epic.getId());
+
+        assertEquals(20, epic.getDuration(), "Продолжительность эпика не рассчиталась.");
+
+        assertEquals(subtask.getStartTime(), epic.getStartTime(), "Неправильное время начала эпика.");
+
+        assertNotNull(taskManager.getEpic(subtask.getParentId()), "вот тут");
 
         assertTrue(taskManager.getSubtaskList().contains(subtask), "Подзадача не добавился.");
+
+        assertFalse(taskManager.getSubtaskList().contains(subtask2), "Пересекаемая подзадача добавилась.");
 
         assertEquals(taskManager.getEpicStatus(epic.getId()), getEpicStatus(taskManager.getEpicSubtasks(epic.getId())));
     }
@@ -127,14 +158,24 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void updateTask() throws ManagerSaveException {
         Task task = new Task("задача1", "описание1");
+        Task task2 = new Task("задача2", "описание2");
+
+
+        task2.setDuration(10);
+        task2.setStartTime(Optional.of(LocalDateTime.now().plusMinutes(5)));
+
         taskManager.addTask(task);
+        taskManager.addTask(task2);
 
         Task taskUpdate = taskManager.getTask(task.getId());
 
         taskUpdate.setStatus(Status.IN_PROGRESS);
+        task.setDuration(10);
+        task.setStartTime(Optional.of(LocalDateTime.now().plusMinutes(20)));
+
         taskManager.updateTask(taskUpdate);
 
-        assertEquals(taskUpdate.toString(), taskManager.getTask(task.getId()).toString());
+        assertEquals(taskUpdate.toString(), taskManager.getTask(task.getId()).toString(), "задача не обновилась.");
     }
 
     @Test
@@ -156,13 +197,22 @@ abstract class TaskManagerTest<T extends TaskManager> {
     void updateSubtask() throws ManagerSaveException {
         Epic epic = new Epic("эпик1", "описание1");
         Subtask subtask = new Subtask("подзадача1", "описани1");
+        Subtask subtask2 = new Subtask("подзадача2", "описани2");
+
+        subtask2.setDuration(10);
+        subtask2.setStartTime(Optional.of(LocalDateTime.now().plusMinutes(5)));
 
         taskManager.addEpic(epic);
         taskManager.addSubtask(subtask, epic.getId());
+        taskManager.addSubtask(subtask2, epic.getId());
 
         Subtask subtaskUpdate = taskManager.getSubtask(subtask.getId());
 
         subtaskUpdate.setStatus(Status.IN_PROGRESS);
+
+        subtask.setDuration(10);
+        subtask.setStartTime(Optional.of(LocalDateTime.now().plusMinutes(20)));
+
         taskManager.updateSubtask(subtaskUpdate);
 
         assertEquals(subtaskUpdate.toString(), taskManager.getSubtask(subtask.getId()).toString());

@@ -67,7 +67,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     public void save() throws ManagerSaveException {
         try {
             Writer fileWriter = new FileWriter(file);
-            fileWriter.write("id,type,name,status,description,epic,duration,startTime, endTime");
+            fileWriter.write("id,type,name,status,description,duration,startTime,endTime,epic");
             fileWriter.write("\n");
 
             for (Task task : tasks.values()) {
@@ -118,10 +118,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     }
 
     private void parseHistory(String history) {
-        String[] splittedValue = history.split(",");
+        List<Long> splittedValue = InMemoryHistoryManager.fromString(history);
 
-        for (String value : splittedValue) {
-            historyManager.add(Long.parseLong(value));
+        for (Long value : splittedValue) {
+            historyManager.add(value);
         }
     }
 
@@ -214,6 +214,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 
         FileBackedTasksManager fileBackedTasksManager1 = FileBackedTasksManager.loadFromFile(file);
 
+
+
         Task task1 = new Task("Задача1", "описание1");
         task1.setDuration(10);
         task1.setStartTime(Optional.of(LocalDateTime.now()));
@@ -245,7 +247,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         fileBackedTasksManager1.addSubtask(subtask2, 4);
 
 
-
         fileBackedTasksManager1.getEpic(4);
         fileBackedTasksManager1.getTask(1);
         fileBackedTasksManager1.getSubtask(5);
@@ -253,9 +254,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 
         System.out.println(fileBackedTasksManager1.getPrioritizedTasks());
 
-
-        /*FileBackedTasksManager fileBackedTasksManager2 = FileBackedTasksManager.loadFromFile(file);
-
+        FileBackedTasksManager fileBackedTasksManager2 = FileBackedTasksManager.loadFromFile(file);
 
         System.out.println("fileBackedTasksManager1");
         System.out.println(fileBackedTasksManager1.tasks);
@@ -267,6 +266,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         System.out.println(fileBackedTasksManager2.tasks);
         System.out.println(fileBackedTasksManager2.epics);
         System.out.println(fileBackedTasksManager2.subtasks);
-        System.out.println(fileBackedTasksManager2.history()); */
+        System.out.println(fileBackedTasksManager2.history());
     }
 }
