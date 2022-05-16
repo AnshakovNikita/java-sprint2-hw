@@ -4,12 +4,11 @@ import ru.yandex.practicum.Enum.Status;
 import ru.yandex.practicum.Enum.TypeTasks;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class Subtask extends Task {
 
-    private long parentId; //Исправил
+    private long parentId;
 
     public Subtask(String name, String description) {
         super(name, description);

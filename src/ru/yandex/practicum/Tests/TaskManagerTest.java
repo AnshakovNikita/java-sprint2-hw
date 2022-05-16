@@ -10,6 +10,7 @@ import ru.yandex.practicum.tracker.Task;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,6 +44,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         assertTrue(taskManager.getTaskList().contains(task), "Задача не добавилась.");
         assertFalse(taskManager.getTaskList().contains(task2), "Пересекаемая задача добавилась.");
+        taskManager.clearTask();
     }
 
     @Test
@@ -56,6 +58,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.addEpic(epic);
 
         assertTrue(taskManager.getEpicList().contains(epic), "Эпик не добавился.");
+        taskManager.clearTask();
     }
 
     @Test
@@ -95,6 +98,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertFalse(taskManager.getSubtaskList().contains(subtask2), "Пересекаемая подзадача добавилась.");
 
         assertEquals(taskManager.getEpicStatus(epic.getId()), getEpicStatus(taskManager.getEpicSubtasks(epic.getId())));
+        taskManager.clearEpic();
+        taskManager.clearSubtask();
     }
 
     @Test
@@ -153,6 +158,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertNull(taskManager.getSubtask(subtask.getId()));
 
         assertEquals(taskManager.getEpicStatus(epic.getId()), getEpicStatus(taskManager.getEpicSubtasks(epic.getId())));
+        taskManager.clearEpic();
+        taskManager.clearSubtask();
     }
 
     @Test
@@ -176,6 +183,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.updateTask(taskUpdate);
 
         assertEquals(taskUpdate.toString(), taskManager.getTask(task.getId()).toString(), "задача не обновилась.");
+        taskManager.clearTask();
     }
 
     @Test
@@ -191,6 +199,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(epicUpdate.toString(), taskManager.getEpic(epic.getId()).toString());
 
         assertEquals(taskManager.getEpicStatus(epic.getId()), getEpicStatus(taskManager.getEpicSubtasks(epic.getId())));
+        taskManager.clearEpic();
     }
 
     @Test
@@ -218,9 +227,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(subtaskUpdate.toString(), taskManager.getSubtask(subtask.getId()).toString());
 
         assertEquals(taskManager.getEpicStatus(epic.getId()), getEpicStatus(taskManager.getEpicSubtasks(epic.getId())));
+        taskManager.clearEpic();
+        taskManager.clearTask();
+        taskManager.clearSubtask();
     }
 
-    private Status getEpicStatus(ArrayList<Subtask> sub) {
+    private Status getEpicStatus(List<Subtask> sub) {
         Status status = Status.NEW;
         for (int i = 0 ; i < sub.size() ; i++) {
             if (i == 0) {

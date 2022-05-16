@@ -33,74 +33,39 @@ public class InMemoryTaskManager implements TaskManager {
     });
 
         @Override
-        public String toString(Task task) {
-        return null;
-    }
-
-        @Override
-        public String toString(Epic epic) {
-        return null;
-    }
-
-        @Override
         public Task getTask(long id) {
-            Task taskCopy = new Task("", "");
             Task task = null;
             if (tasks.containsKey(id)) {
                 task = tasks.get(id);
-                taskCopy.setId(task.getId());
-                taskCopy.name = task.name;
-                taskCopy.description = task.description;
-                taskCopy.setStatus(task.getStatus());
-                taskCopy.setDuration(task.getDuration());
-                taskCopy.setStartTime(task.getStartTime());
                 historyManager.add(task.getId());
             } else {
-                taskCopy = null;
                 System.out.println("такого нет");
             }
-            return taskCopy;
+            return task;
         }
 
         @Override
         public Epic getEpic(long id) {
-            Epic epicCopy = new Epic("", "");
             Epic epic = null;
             if (epics.containsKey(id)) {
                 epic = epics.get(id);
-                epicCopy.setId(epic.getId());
-                epicCopy.name = epic.name;
-                epicCopy.description = epic.description;
-                epicCopy.setStatus(epic.getStatus());
-                epicCopy.setDuration(epic.getDuration());
-                epicCopy.setStartTime(epic.getStartTime());
                 historyManager.add(epic.getId());
             } else {
-                epicCopy = null;
                 System.out.println("такого нет");
             }
-            return epicCopy;
+            return epic;
         }
 
         @Override
         public Subtask getSubtask(long id) {
-            Subtask subtaskCopy = new Subtask("", "");
             Subtask subtask = null;
             if (subtasks.containsKey(id)) {
                 subtask = subtasks.get(id);
-                subtaskCopy.setId(subtask.getId());
-                subtaskCopy.name = subtask.name;
-                subtaskCopy.description = subtask.description;
-                subtaskCopy.setStatus(subtask.getStatus());
-                subtaskCopy.setParentId(subtask.getParentId());
-                subtaskCopy.setDuration(subtask.getDuration());
-                subtaskCopy.setStartTime(subtask.getStartTime());
                 historyManager.add(subtask.getId());
-            } else {
-                subtaskCopy = null;
+            } else {;
                 System.out.println("такого нет");
             }
-            return subtaskCopy;
+            return subtask;
         }
 
         @Override
@@ -139,7 +104,7 @@ public class InMemoryTaskManager implements TaskManager {
                     subtask.setParentId(epicId);
                     subtasks.put(subtask.getId(), subtask);
                     Epic epic = epics.get(epicId);
-                    ArrayList<Long> epicSubtasks = epic.getSubtasks();
+                    List<Long> epicSubtasks = epic.getSubtasks();
                     epicSubtasks.add(subtask.getId());
                     epic.setSubtasks(epicSubtasks);
                     updateEpic(epic);
@@ -214,8 +179,8 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public ArrayList<Subtask> getEpicSubtasks (long id) {
-            ArrayList<Subtask> subtasksList = new ArrayList<>();
+        public List<Subtask> getEpicSubtasks (long id) {
+            List<Subtask> subtasksList = new ArrayList<>();
                 if (epics.containsKey(id)) {
                     for (Subtask sub : subtasks.values()) {
                         if (id == sub.getParentId()) {
@@ -229,8 +194,8 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public ArrayList<Task> getTaskList() {
-            ArrayList<Task> taskList = new ArrayList<>();
+        public List<Task> getTaskList() {
+            List<Task> taskList = new ArrayList<>();
                 for (Task tasks : tasks.values()) {
                     taskList.add(tasks);
                 }
@@ -238,8 +203,8 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public ArrayList<Epic> getEpicList() {
-            ArrayList<Epic> epicList = new ArrayList<>();
+        public List<Epic> getEpicList() {
+            List<Epic> epicList = new ArrayList<>();
                 for (Epic epics : epics.values()) {
                     epicList.add(epics);
                 }
@@ -247,8 +212,8 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public ArrayList<Subtask> getSubtaskList() {
-            ArrayList<Subtask> subtaskList = new ArrayList<>();
+        public List<Subtask> getSubtaskList() {
+            List<Subtask> subtaskList = new ArrayList<>();
                 for (Subtask subtasks : subtasks.values()) {
                     subtaskList.add(subtasks);
                 }
@@ -304,7 +269,7 @@ public class InMemoryTaskManager implements TaskManager {
         @Override
         public Status getEpicStatus(long id) {
            Status status = Status.NEW;
-           ArrayList <Subtask> sub = getEpicSubtasks(id);
+           List<Subtask> sub = getEpicSubtasks(id);
            for (int i = 0 ; i < sub.size() ; i++) {
                if (i == 0) {
                    status = sub.get(i).getStatus();
@@ -331,7 +296,7 @@ public class InMemoryTaskManager implements TaskManager {
         @Override
         public long getEpicDuration(long id){
             long result = 0;
-            ArrayList<Subtask> subtasks = getEpicSubtasks(id);
+            List<Subtask> subtasks = getEpicSubtasks(id);
             for(Subtask sub : subtasks) {
                 result += sub.getDuration();
             }
@@ -340,7 +305,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         @Override
         public Optional<LocalDateTime> getEpicStartTime(long id) {
-            ArrayList<Subtask> subtasks = getEpicSubtasks(id);
+            List<Subtask> subtasks = getEpicSubtasks(id);
             if(subtasks.size() == 0) {
                 return Optional.empty();
             }
@@ -360,8 +325,8 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         public TreeSet<Task> getPrioritizedTasks(){
-        return prioritizedTasks;
-    }
+            return prioritizedTasks;
+        }
 
        public boolean hasIntersections() {
             boolean result = false;

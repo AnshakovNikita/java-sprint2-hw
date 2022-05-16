@@ -9,7 +9,7 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
-    static File file = new File("C://Users//NikitaKub//IdeaProjects//java-sprint2-hw", "FileBackedTasksTest.csv");
+    static File file = new File("./Files" , "FileBackedTasksTest.csv");
     private static FileBackedTasksManager fileBackedTasksManager;
 
     static {

@@ -5,10 +5,11 @@ import ru.yandex.practicum.Enum.TypeTasks;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Epic extends Task {
-    protected ArrayList<Long> subtasks = new ArrayList<>();
+    protected List<Long> subtasks = new ArrayList<>();
 
     public Epic(String name, String description) {
         super(name, description);
@@ -35,11 +36,11 @@ public class Epic extends Task {
     }
 
 
-    public void setSubtasks(ArrayList<Long> subtasks) {
+    public void setSubtasks(List<Long> subtasks) {
         this.subtasks = subtasks;
     }
 
-    public ArrayList<Long> getSubtasks() {
+    public List<Long> getSubtasks() {
         return subtasks;
     }
 }

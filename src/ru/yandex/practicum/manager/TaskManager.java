@@ -1,67 +1,61 @@
 package ru.yandex.practicum.manager;
 
 import ru.yandex.practicum.Enum.Status;
-import ru.yandex.practicum.Exception.ManagerSaveException;
+
 import ru.yandex.practicum.tracker.Epic;
 import ru.yandex.practicum.tracker.Subtask;
 import ru.yandex.practicum.tracker.Task;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.TreeSet;
 
 public interface TaskManager {
 
-    String toString(Task task);
+    Task getTask(long id);
 
-    String toString(Epic epic);
+    Epic getEpic(long id);
 
-    Task getTask(long id) throws ManagerSaveException;
+    Subtask getSubtask(long id);
 
-    Epic getEpic(long id) throws ManagerSaveException;
+    void addTask(Task task);
 
-    Subtask getSubtask(long id) throws ManagerSaveException;
+    void addEpic(Epic epic);
 
-    void addTask(Task task) throws ManagerSaveException;
+    void addSubtask(Subtask subtask, long epicId);
 
-    void addEpic(Epic epic) throws ManagerSaveException;
+    void clearTask();
 
-    void addSubtask(Subtask subtask, long epicId) throws ManagerSaveException;
+    void clearEpic();
 
-    void clearTask() throws ManagerSaveException;
+    void clearSubtask();
 
-    void clearEpic() throws ManagerSaveException;
+    void removeTask(long id);
 
-    void clearSubtask() throws ManagerSaveException;
+    void removeEpic(long id);
 
-    void removeTask(long id) throws ManagerSaveException;
+    void removeSubtask(long id);
 
-    void removeEpic(long id) throws ManagerSaveException;
+    List<Subtask> getEpicSubtasks(long id);
 
-    void removeSubtask(long id) throws ManagerSaveException;
+    List<Task> getTaskList();
 
-    ArrayList<Subtask> getEpicSubtasks(long id);
+    List<Epic> getEpicList();
 
-    ArrayList<Task> getTaskList();
+    List<Subtask> getSubtaskList();
 
-    ArrayList<Epic> getEpicList();
+    void updateTask(Task task);
 
-    ArrayList<Subtask> getSubtaskList();
+    void updateEpic(Epic epic);
 
-    void updateTask(Task task) throws ManagerSaveException;
+    void updateSubtask(Subtask subtask);
 
-    void updateEpic(Epic epic) throws ManagerSaveException;
-
-    void updateSubtask(Subtask subtask) throws ManagerSaveException;
-
-    List<Long> history() throws ManagerSaveException;
+    List<Long> history();
 
     Status getEpicStatus(long id);
 
-    void clearHistory() throws ManagerSaveException;
+    void clearHistory();
 
     long getEpicDuration(long id);
 

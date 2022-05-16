@@ -24,14 +24,6 @@ public class Task {
         this.status = Status.NEW;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
     @Override
     public String toString() {
         String startTime = optionalTimeToString(getStartTime());
@@ -83,10 +75,6 @@ public class Task {
             return Optional.of(startTime.get().plusMinutes(duration));
         }
             return Optional.empty();
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Optional<LocalDateTime> getStartTime() {

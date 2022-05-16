@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager  {
+public class FileBackedTasksManager extends InMemoryTaskManager {
 
-    File file;
+    private File file;
 
     public enum FileReaderMode {
         TASK, HISTORY
@@ -24,7 +24,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         file = initialFile;
     }
 
-    public static FileBackedTasksManager loadFromFile(File initialFile) throws ManagerSaveException {
+    public static FileBackedTasksManager loadFromFile(File initialFile) {
         try {
             Reader fileReader = new FileReader(initialFile);
             BufferedReader br = new BufferedReader(fileReader);
@@ -64,7 +64,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 
 
 
-    public void save() throws ManagerSaveException {
+    public void save() {
         try {
             Writer fileWriter = new FileWriter(file);
             fileWriter.write("id,type,name,status,description,duration,startTime,endTime,epic");
@@ -126,91 +126,91 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     }
 
     @Override
-    public void addTask(Task task) throws ManagerSaveException {
+    public void addTask(Task task) {
         super.addTask(task);
         save();
     }
 
     @Override
-    public void addEpic(Epic epic) throws ManagerSaveException {
+    public void addEpic(Epic epic) {
         super.addEpic(epic);
         save();
     }
 
     @Override
-    public void addSubtask(Subtask subtask, long epicId) throws ManagerSaveException {
+    public void addSubtask(Subtask subtask, long epicId) {
         super.addSubtask(subtask, epicId);
         save();
     }
 
     @Override
-    public void clearTask() throws ManagerSaveException {
+    public void clearTask() {
         super.clearTask();
         save();
     }
 
     @Override
-    public void clearEpic() throws ManagerSaveException {
+    public void clearEpic()  {
         super.clearEpic();
         save();
     }
 
     @Override
-    public void clearSubtask() throws ManagerSaveException {
+    public void clearSubtask() {
         super.clearSubtask();
         save();
     }
 
     @Override
-    public void removeTask(long id) throws ManagerSaveException {
+    public void removeTask(long id)  {
         super.removeTask(id);
         save();
     }
 
     @Override
-    public void removeEpic(long id) throws ManagerSaveException {
+    public void removeEpic(long id) {
         super.removeEpic(id);
         save();
     }
 
     @Override
-    public void removeSubtask(long id) throws ManagerSaveException {
+    public void removeSubtask(long id) {
         super.removeSubtask(id);
         save();
     }
 
 
     @Override
-    public void updateTask(Task task) throws ManagerSaveException {
+    public void updateTask(Task task) {
         super.updateTask(task);
         save();
     }
 
     @Override
-    public void updateEpic(Epic epic) throws ManagerSaveException {
+    public void updateEpic(Epic epic) {
         super.updateEpic(epic);
         save();
     }
 
     @Override
-    public void updateSubtask(Subtask subtask) throws ManagerSaveException {
+    public void updateSubtask(Subtask subtask) {
         super.updateSubtask(subtask);
         save();
     }
 
     @Override
-    public List<Long> history() throws ManagerSaveException {
+    public List<Long> history() {
         return super.history();
     }
 
     @Override
-    public void clearHistory() throws ManagerSaveException {
+    public void clearHistory() {
         super.clearHistory();
         save();
     }
 
-    public static void main(String[] args) throws ManagerSaveException {
-        File file = new File("C://Users//NikitaKub//IdeaProjects//java-sprint2-hw", "FileBackedTasks.csv");
+    public static void main(String[] args) {
+        File file = new File("./Files" , "FileBackedTasks.csv");
 
         FileBackedTasksManager fileBackedTasksManager1 = FileBackedTasksManager.loadFromFile(file);
 
