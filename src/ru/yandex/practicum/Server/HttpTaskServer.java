@@ -19,8 +19,8 @@ import java.util.Map;
 import static jdk.internal.util.xml.XMLStreamWriter.DEFAULT_CHARSET;
 
 public class HttpTaskServer {
-    static File file = new File("./Files" , "FileBackedTasks.csv");
-    public static TaskManager fileBackedTasksManager = Managers.getDefaultFileBacked(file);
+    private static File file = new File("./Files" , "FileBackedTasks.csv");
+    private static TaskManager fileBackedTasksManager = Managers.getDefaultFileBacked(file);
 
     public static void main(String[] args) throws Exception {
         HttpServer httpServer = HttpServer.create();

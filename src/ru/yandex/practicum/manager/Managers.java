@@ -4,8 +4,8 @@ import java.io.File;
 
 public class Managers {
 
-    public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+    public static TaskManager getDefault(String url) throws InterruptedException {
+        return new HTTPTaskManager(url);
     }
 
     public static TaskManager getDefaultFileBacked(File file) {
@@ -15,5 +15,4 @@ public class Managers {
     public static HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();
     }
-
 }

@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class HTTPTaskManager extends FileBackedTasksManager {
-    Gson gson = new Gson();
-    public static File file = new File("./Files" , "FileBackedTasks.csv");
-    KVTaskClient kvTaskClient;
+    private Gson gson = new Gson();
+    private static File file = new File("./Files" , "FileBackedTasks.csv");
+    private KVTaskClient kvTaskClient;
 
     public HTTPTaskManager(String url) throws InterruptedException {
         super(file);
