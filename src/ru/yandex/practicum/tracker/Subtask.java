@@ -27,7 +27,7 @@ public class Subtask extends Task {
         String startTime = optionalTimeToString(getStartTime());
         String endTime = optionalTimeToString(getEndTime());
         return getId() + "," + TypeTasks.SUBTASK + "," + name + "," + getStatus() + ","  + description + "," + getDuration() + ","
-                + startTime + "," + endTime + "," + parentId ;
+                + startTime + "," + endTime + "," + parentId;
     }
 
     public static Subtask fromString(String value) {

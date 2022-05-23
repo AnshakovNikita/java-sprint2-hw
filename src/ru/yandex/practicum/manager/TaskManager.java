@@ -13,17 +13,17 @@ import java.util.TreeSet;
 
 public interface TaskManager {
 
-    Task getTask(long id);
+    Task getTask(long id) throws InterruptedException;
 
-    Epic getEpic(long id);
+    Epic getEpic(long id) throws InterruptedException;
 
-    Subtask getSubtask(long id);
+    Subtask getSubtask(long id) throws InterruptedException;
 
-    void addTask(Task task);
+    void addTask(Task task) throws InterruptedException;
 
-    void addEpic(Epic epic);
+    void addEpic(Epic epic) throws InterruptedException;
 
-    void addSubtask(Subtask subtask, long epicId);
+    void addSubtask(Subtask subtask, long epicId) throws InterruptedException;
 
     void clearTask();
 

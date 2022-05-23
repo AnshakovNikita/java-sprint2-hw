@@ -20,10 +20,10 @@ class EpicTest {
 
 
     @BeforeEach
-    public void beforeEach(TestInfo info) throws ManagerSaveException {
+    public void beforeEach(TestInfo info) throws ManagerSaveException, InterruptedException {
         inMemoryTaskManager.addEpic(new Epic("Эпик1", "Описание1"));
         if (info.getDisplayName().equals("shouldBeEmpty()")) {
-            return; // skip @BeforeEach in shouldBeEmpty() test
+            return;
         }
         inMemoryTaskManager.addSubtask(new Subtask("Подзадача1эпик1", "Описание2"), 1);
         inMemoryTaskManager.addSubtask(new Subtask("Подзадача2эпик1", "Описание3"), 1);

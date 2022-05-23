@@ -101,14 +101,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             switch(type){
                 case TASK:
                     Task newTask = Task.fromString(task);
+                    if(newTask.getId() > globalId) {
+                        globalId = newTask.getId() + 1;
+                    }
                     super.addTask(newTask);
                     break;
                 case EPIC:
                     Epic newEpic = Epic.fromString(task);
+                    if(newEpic.getId() > globalId) {
+                        globalId = newEpic.getId() + 1;
+                    }
                     super.addEpic(newEpic);
                     break;
                 case SUBTASK:
                     Subtask newSubtask = Subtask.fromString(task);
+                    if(newSubtask.getId() > globalId) {
+                        globalId = newSubtask.getId() + 1;
+                    }
                     super.addSubtask(newSubtask, newSubtask.getParentId());
                     break;
             }
@@ -122,25 +131,47 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         for (Long value : splittedValue) {
             historyManager.add(value);
+            save();
         }
     }
 
     @Override
-    public void addTask(Task task) {
+    public void addTask(Task task) throws InterruptedException {
         super.addTask(task);
         save();
     }
 
     @Override
-    public void addEpic(Epic epic) {
+    public void addEpic(Epic epic) throws InterruptedException {
         super.addEpic(epic);
         save();
     }
 
     @Override
-    public void addSubtask(Subtask subtask, long epicId) {
+    public void addSubtask(Subtask subtask, long epicId) throws InterruptedException {
         super.addSubtask(subtask, epicId);
         save();
+    }
+
+    @Override
+    public Task getTask(long id) throws InterruptedException {
+        Task task = super.getTask(id);
+        save();
+        return task;
+    }
+
+    @Override
+    public Epic getEpic(long id) throws InterruptedException {
+        Epic epic = super.getEpic(id);
+        save();
+        return epic;
+    }
+
+    @Override
+    public Subtask getSubtask(long id) throws InterruptedException {
+        Subtask subtask = super.getSubtask(id);
+        save();
+        return subtask;
     }
 
     @Override
@@ -209,7 +240,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         File file = new File("./Files" , "FileBackedTasks.csv");
 
         FileBackedTasksManager fileBackedTasksManager1 = FileBackedTasksManager.loadFromFile(file);
@@ -252,7 +283,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         fileBackedTasksManager1.getSubtask(5);
         fileBackedTasksManager1.history();
 
-        System.out.println(fileBackedTasksManager1.getPrioritizedTasks());
+        /*System.out.println(fileBackedTasksManager1.getPrioritizedTasks());
 
         FileBackedTasksManager fileBackedTasksManager2 = FileBackedTasksManager.loadFromFile(file);
 
@@ -266,6 +297,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println(fileBackedTasksManager2.tasks);
         System.out.println(fileBackedTasksManager2.epics);
         System.out.println(fileBackedTasksManager2.subtasks);
-        System.out.println(fileBackedTasksManager2.history());
+        System.out.println(fileBackedTasksManager2.history());*/
     }
 }

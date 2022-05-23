@@ -9,6 +9,7 @@ import ru.yandex.practicum.Enum.Status;
 import java.time.LocalDateTime;
 import java.util.*;
 
+
 public class InMemoryTaskManager implements TaskManager {
 
     HashMap<Long, Task> tasks = new HashMap<>();
@@ -33,7 +34,7 @@ public class InMemoryTaskManager implements TaskManager {
     });
 
         @Override
-        public Task getTask(long id) {
+        public Task getTask(long id) throws InterruptedException {
             Task task = null;
             if (tasks.containsKey(id)) {
                 task = tasks.get(id);
@@ -45,7 +46,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public Epic getEpic(long id) {
+        public Epic getEpic(long id) throws InterruptedException {
             Epic epic = null;
             if (epics.containsKey(id)) {
                 epic = epics.get(id);
@@ -57,7 +58,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public Subtask getSubtask(long id) {
+        public Subtask getSubtask(long id) throws InterruptedException {
             Subtask subtask = null;
             if (subtasks.containsKey(id)) {
                 subtask = subtasks.get(id);
@@ -69,7 +70,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public void addTask(Task task) throws ManagerSaveException {
+        public void addTask(Task task) throws ManagerSaveException, InterruptedException {
             if (task.getId() == 0){
                 task.setId(globalId);
                 globalId++;
@@ -84,7 +85,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public void addEpic(Epic epic) throws ManagerSaveException {
+        public void addEpic(Epic epic) throws ManagerSaveException, InterruptedException {
             if (epic.getId() == 0) {
                 epic.setId(globalId);
                 globalId++;
@@ -93,7 +94,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         @Override
-        public void addSubtask(Subtask subtask, long epicId) throws ManagerSaveException {
+        public void addSubtask(Subtask subtask, long epicId) throws ManagerSaveException, InterruptedException {
             if (epics.containsKey(epicId)) {
                 if (subtask.getId() == 0) {
                     subtask.setId(globalId);
@@ -170,8 +171,10 @@ public class InMemoryTaskManager implements TaskManager {
         @Override
         public void removeSubtask(long id) throws ManagerSaveException {
             if (subtasks.containsKey(id)) {
+                Epic epic = epics.get(subtasks.get(id).getParentId());
                 subtasks.remove(id);
                 historyManager.remove(id);
+                updateEpic(epic);
                 System.out.println("Подзадача удалена.");
             } else {
                 System.out.println("Такой подзадачи нет.");
